@@ -18,6 +18,7 @@ const {
   Category,
   Message,
   Chat,
+  Notification,
 } = model;
 
 /**
@@ -117,6 +118,13 @@ class Repository {
    */
   static get Chat() {
     return Chat;
+  }
+
+  /**
+   * @type {Model}
+   */
+  static get Notification() {
+    return Notification;
   }
 }
 

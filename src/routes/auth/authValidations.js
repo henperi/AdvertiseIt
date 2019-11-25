@@ -6,6 +6,7 @@ const {
   createUserSchema,
   loginUserSchema,
   resetPasswordSchema,
+  fcmTokenSchema,
 } = AuthSchema;
 
 const validateCreateUser = async (req, res, next) => {
@@ -36,6 +37,20 @@ const validateLoginUser = async (req, res, next) => {
   }
 };
 
+const validateUpdateFCMToken = async (req, res, next) => {
+  try {
+    // @ts-ignore
+    await fcmTokenSchema.validateAsync(req.body, {
+      abortEarly: false,
+    });
+    return next();
+  } catch (errors) {
+    return AppResponse.badRequest(res, {
+      errors: formatJoiErrors(errors),
+    });
+  }
+};
+
 const validateResetPassword = async (req, res, next) => {
   try {
     // @ts-ignore
@@ -54,4 +69,9 @@ const validateResetPassword = async (req, res, next) => {
   }
 };
 
-export { validateCreateUser, validateLoginUser, validateResetPassword };
+export {
+  validateCreateUser,
+  validateLoginUser,
+  validateResetPassword,
+  validateUpdateFCMToken,
+};

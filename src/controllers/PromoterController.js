@@ -4,6 +4,8 @@ import PromoterRequestRepo from '../repositories/PromoterRequestRepo';
 
 // Helpers
 import { AppResponse } from '../helpers/AppResponse';
+import NotificationRepo from '../repositories/NotificationRepo';
+import { NOTIFICATIONSCOPE } from '../helpers/notificationScopes';
 
 /**
  * Controller that handles everything relating to Users
@@ -23,7 +25,8 @@ class PromoterController {
 
     try {
       const getUser = () => UserRepo.getById(userId);
-      const getPromoterRequest = () => PromoterRequestRepo.getByUserId(userId);
+      const getPromoterRequest = () =>
+        PromoterRequestRepo.getByUserId(userId);
 
       const [user, promoterRequest] = await Promise.all([
         getUser(),
@@ -48,6 +51,13 @@ class PromoterController {
        * const { id } = res.locals.admin;
        */
       if (promoterRequest) {
+        await NotificationRepo.create({
+          receiverId: userId,
+          senderId: null,
+          message: 'Your request to become a promoter has been approved',
+          scope: NOTIFICATIONSCOPE.PRODUCT_LIKE,
+        });
+
         await promoterRequest.update({
           status: 'Approved',
           approvedBy: id,

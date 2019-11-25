@@ -31,9 +31,10 @@ class ProductImageRepo extends Repository {
 
   /**
    * @description Method to get a product by title
-   * @typedef {{ productId: string }} data
+   * @typedef {{ productId: * }} data
    * @param {data} data
    *
+   * @typedef {{ productId: * }} result
    * @returns {Promise<*>} Response
    */
   static async getByProductId({ productId }) {

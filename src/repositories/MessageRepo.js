@@ -1,6 +1,8 @@
 import Sequelize from 'sequelize';
 
 import Repository from './Repository';
+import NotificationRepo from './NotificationRepo';
+import { NOTIFICATIONSCOPE } from '../helpers/notificationScopes';
 
 const { Op } = Sequelize;
 /**
@@ -189,6 +191,14 @@ class MessageRepo extends Repository {
       media = null,
       mediaType = 'Text',
     } = data;
+
+    NotificationRepo.create({
+      receiverId,
+      senderId,
+      message,
+      scope: NOTIFICATIONSCOPE.MESSAGE,
+      scopeId: chatId,
+    });
 
     const sentMessage = this.Message.create({
       message,

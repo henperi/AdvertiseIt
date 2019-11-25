@@ -23,6 +23,8 @@
     "implicit-arrow-linebreak": "off",
     "import/prefer-default-export": "off",
     "function-paren-newline": "off",
+    "object-curly-newline": "off",
+    "arrow-parens": "off",
     "import/no-unresolved": [
       2,
       {

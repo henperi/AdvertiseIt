@@ -7,7 +7,9 @@ import {
   validateCreateUser,
   validateLoginUser,
   validateResetPassword,
+  validateUpdateFCMToken,
 } from './authValidations';
+import { checkUserAuth } from '../../middlewares/auth';
 
 const authRouter = express.Router();
 
@@ -31,6 +33,16 @@ authRouter.put(
   '/reset-password/:resetId',
   validateResetPassword,
   AuthController.resetUserPassword,
+);
+
+/**
+ * Update fcm token
+ */
+authRouter.put(
+  '/update-fcm-token',
+  checkUserAuth,
+  validateUpdateFCMToken,
+  AuthController.updateFCMToken,
 );
 
 /**

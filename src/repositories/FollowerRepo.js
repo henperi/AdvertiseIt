@@ -1,6 +1,8 @@
 import Sequelize from 'sequelize';
 
 import Repository from './Repository';
+import NotificationRepo from './NotificationRepo';
+import { NOTIFICATIONSCOPE } from '../helpers/notificationScopes';
 
 const { Op } = Sequelize;
 /**
@@ -73,6 +75,14 @@ class FollowerRepo extends Repository {
    */
   static async create(data) {
     const { followerId, userId } = data;
+
+    NotificationRepo.create({
+      receiverId: userId,
+      senderId: followerId,
+      message: 'new user followed you',
+      scope: NOTIFICATIONSCOPE.FOLLOW,
+      scopeId: followerId,
+    });
 
     return this.Follower.create({
       followerId,

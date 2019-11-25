@@ -29,6 +29,7 @@ class AuthController {
       firstName,
       lastName = '',
       accountType,
+      fcmToken,
     } = reqBody;
 
     try {
@@ -50,6 +51,7 @@ class AuthController {
         uniqueId: generateUniqueId(),
         password: hashedPassword,
         secretKey: `${generateUniqueId()}-${email.toLowerCase()}`,
+        fcmToken,
         accountType,
         userProfile: { firstName, lastName },
       });
@@ -71,7 +73,7 @@ class AuthController {
    */
   static async authenticateUser(req, res) {
     const reqBody = trimify(req.body);
-    const { email, password } = reqBody;
+    const { email, password, fcmToken } = reqBody;
 
     try {
       const user = await UserRepo.getByEmail(email.toLowerCase());
@@ -90,6 +92,12 @@ class AuthController {
         });
       }
       const token = generateUserAuthToken(setupTokenData(user));
+
+      if (fcmToken) {
+        user.update({
+          fcmToken,
+        });
+      }
 
       return AppResponse.success(res, {
         message: 'Authenticated successfully',
@@ -147,6 +155,39 @@ class AuthController {
 
       return AppResponse.success(res, {
         message: 'Password updated successfully',
+      });
+    } catch (errors) {
+      return AppResponse.serverError(res, { errors });
+    }
+  }
+
+  /**
+   * @description controller method to reset a user's password
+   * @param {*} req re
+   * @param {*} res res
+   *
+   * @returns {Promise<AppResponse>} The Return Object
+   */
+  static async updateFCMToken(req, res) {
+    const reqBody = trimify(req.body);
+    const { fcmToken } = reqBody;
+    const { id } = res.locals.user;
+
+    try {
+      const user = await UserRepo.getById(id);
+
+      if (!user) {
+        return AppResponse.notFound(res, {
+          message: 'User not found',
+        });
+      }
+
+      await user.update({
+        fcmToken,
+      });
+
+      return AppResponse.success(res, {
+        message: 'FCM token updated successfully',
       });
     } catch (errors) {
       return AppResponse.serverError(res, { errors });
