@@ -1,6 +1,8 @@
 import Sequelize from 'sequelize';
 
 import Repository from './Repository';
+import { NOTIFICATIONSCOPE } from '../helpers/notificationScopes';
+import NotificationRepo from './NotificationRepo';
 
 const { Op } = Sequelize;
 /**
@@ -27,7 +29,7 @@ class ProductRepo extends Repository {
         [Op.or]: [{ title }],
       },
       include: [{ model: this.ProductImage, as: 'ProductImages' }],
-    }).catch(error => {
+    }).catch((error) => {
       throw new Error(error);
     });
 
@@ -47,7 +49,7 @@ class ProductRepo extends Repository {
         [Op.and]: [{ title }, { userId }],
       },
       include: [{ model: this.ProductImage, as: 'ProductImages' }],
-    }).catch(error => {
+    }).catch((error) => {
       throw new Error(error);
     });
 
@@ -56,7 +58,7 @@ class ProductRepo extends Repository {
 
   /**
    * @description Method to get a product by id
-   * @param {string} id
+   * @param {string | number} id
    *
    * @returns {Promise<*>} Response
    */
@@ -97,7 +99,7 @@ class ProductRepo extends Repository {
       },
       // group: ['Product.id', 'Owner.id'],
       // subQuery: false,
-    }).catch(error => {
+    }).catch((error) => {
       throw new Error(error);
     });
 
@@ -116,7 +118,7 @@ class ProductRepo extends Repository {
         [Op.and]: [{ id }, { userId }],
       },
       include: [{ model: this.ProductImage, as: 'ProductImages' }],
-    }).catch(error => {
+    }).catch((error) => {
       throw new Error(error);
     });
 
@@ -182,7 +184,7 @@ class ProductRepo extends Repository {
       },
       // group: ['Product.id', 'ProductImages.id', 'Owner.id'],
       // subQuery: false,
-    }).catch(error => {
+    }).catch((error) => {
       throw new Error(error);
     });
 
@@ -218,7 +220,7 @@ class ProductRepo extends Repository {
       attributes: {
         exclude: ['description'],
       },
-    }).catch(error => {
+    }).catch((error) => {
       throw new Error(error);
     });
 
@@ -250,7 +252,7 @@ class ProductRepo extends Repository {
         ],
       },
       include: [{ model: this.ProductImage, as: 'ProductImages' }],
-    }).catch(error => {
+    }).catch((error) => {
       throw new Error(error);
     });
 
@@ -281,7 +283,7 @@ class ProductRepo extends Repository {
           },
         ],
       },
-    }).catch(error => {
+    }).catch((error) => {
       throw new Error(error);
     });
 
@@ -297,7 +299,7 @@ class ProductRepo extends Repository {
   static async countProducts({ isPublished = true }) {
     const count = await this.Product.count({
       where: { [Op.or]: [{ isPublished }] },
-    }).catch(error => {
+    }).catch((error) => {
       throw new Error(error);
     });
 
@@ -313,7 +315,7 @@ class ProductRepo extends Repository {
   static async countMyProducts({ userId }) {
     const count = await this.Product.count({
       where: { [Op.or]: [{ userId }] },
-    }).catch(error => {
+    }).catch((error) => {
       throw new Error(error);
     });
 
@@ -338,7 +340,7 @@ class ProductRepo extends Repository {
       userId,
       categoryId,
       isPublished: false,
-    }).catch(error => {
+    }).catch((error) => {
       throw new Error(error);
     });
 
@@ -374,7 +376,7 @@ class ProductRepo extends Repository {
     this.ProductView.create({
       productId,
       viewerId,
-    }).catch(error => {
+    }).catch((error) => {
       throw new Error(error);
     });
 
@@ -383,12 +385,12 @@ class ProductRepo extends Repository {
 
   /**
    *
-   * @param {{ likerId: number, productId: number }} data
+   * @param {{ likerId: number, productId: number, ownerId: number }} data
    *
    * @returns {Promise<any | boolean>} Response
    */
   static async addLike(data) {
-    const { productId, likerId } = data;
+    const { productId, likerId, ownerId } = data;
 
     const isAlreadyLiked = await this.ProductLike.findOne({
       where: {
@@ -405,10 +407,20 @@ class ProductRepo extends Repository {
       return 'unliked';
     }
 
+    // console.log('notification like');
+
+    NotificationRepo.create({
+      receiverId: ownerId,
+      senderId: likerId,
+      message: 'someone liked your product',
+      scope: NOTIFICATIONSCOPE.PRODUCT_LIKE,
+      scopeId: productId,
+    });
+
     this.ProductLike.create({
       productId,
       likerId,
-    }).catch(error => {
+    }).catch((error) => {
       throw new Error(error);
     });
 
@@ -437,7 +449,7 @@ class ProductRepo extends Repository {
     this.ProductBookmark.create({
       productId,
       bookmarkerId,
-    }).catch(error => {
+    }).catch((error) => {
       throw new Error(error);
     });
   }

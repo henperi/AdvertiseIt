@@ -13,6 +13,7 @@ class UserRepo extends Repository {
    *  phone: string, secretKey: string, accountType: string,
    *  userProfile: { firstName: string, lastName: string, image?: string, bio?: string },
    *  authType?: string,
+   * fcmToken?: string,
    * }} createData
    */
 
@@ -58,7 +59,7 @@ class UserRepo extends Repository {
 
   /**
    * @description Method to get a user by email
-   * @param {string} id
+   * @param {number | string} id
    *
    * @returns {Promise<*>} Response
    */
@@ -97,6 +98,7 @@ class UserRepo extends Repository {
       secretKey,
       accountType,
       userProfile,
+      fcmToken,
     } = data;
 
     const user = this.User.create(
@@ -107,6 +109,7 @@ class UserRepo extends Repository {
         secretKey,
         accountType,
         password,
+        fcmToken,
         ...getAuthType(),
         Profile: userProfile,
       },

@@ -24,7 +24,8 @@ class MessageController {
 
     try {
       const getUser = () => UserRepo.getById(receiverId);
-      const findOrCreateChat = () => ChatRepo.findOrCreate({ receiverId, senderId });
+      const findOrCreateChat = () =>
+        ChatRepo.findOrCreate({ receiverId, senderId });
 
       const [user, chat] = await Promise.all([
         getUser(),
@@ -66,23 +67,21 @@ class MessageController {
     // const { chatId } = req.params;
 
     try {
-      const countMessages = () => MessageRepo.countMessages(usePagination, {
-        senderId,
-        receiverId,
-      });
-      const getMessages = () => MessageRepo.getBySenderIdAndReceiverId(usePagination, {
-        senderId,
-        receiverId,
-      });
+      const countMessages = () =>
+        MessageRepo.countMessages(usePagination, {
+          senderId,
+          receiverId,
+        });
+      const getMessages = () =>
+        MessageRepo.getBySenderIdAndReceiverId(usePagination, {
+          senderId,
+          receiverId,
+        });
 
       const [count, messages] = await Promise.all([
         countMessages(),
         getMessages(),
       ]);
-      // const [count, messages] = await MessageRepo.getByChatId(
-      //   usePagination,
-      //   { chatId },
-      // );
 
       const metaData = { count, ...paginationData };
 
@@ -106,16 +105,18 @@ class MessageController {
     const { id: senderId } = res.locals.user;
 
     try {
-      const countSearch = () => MessageRepo.countSearch(usePagination, {
-        text,
-        senderId,
-        receiverId,
-      });
-      const getMessages = () => MessageRepo.search(usePagination, {
-        text,
-        senderId,
-        receiverId,
-      });
+      const countSearch = () =>
+        MessageRepo.countSearch(usePagination, {
+          text,
+          senderId,
+          receiverId,
+        });
+      const getMessages = () =>
+        MessageRepo.search(usePagination, {
+          text,
+          senderId,
+          receiverId,
+        });
 
       const [count, messages] = await Promise.all([
         countSearch(),

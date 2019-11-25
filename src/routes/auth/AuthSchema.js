@@ -27,6 +27,7 @@ class AuthSchema {
       accountType: Joi.string()
         .valid('Customer', 'Merchant')
         .required(),
+      fcmToken: Joi.string().optional(),
     });
   }
 
@@ -39,6 +40,16 @@ class AuthSchema {
         .email()
         .required(),
       password: Joi.string().required(),
+      fcmToken: Joi.string().optional(),
+    });
+  }
+
+  /**
+   * @description The schema used to validate the process of authenticating a user
+   */
+  static get fcmTokenSchema() {
+    return Joi.object({
+      fcmToken: Joi.string().required(),
     });
   }
 

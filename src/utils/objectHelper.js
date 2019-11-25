@@ -17,6 +17,25 @@ const numberify = (data) => {
 };
 
 /**
+ * @description Attempts to convert an object values to a string
+ * @param {Object<string, any>} data
+ *
+ * @returns {Object<string, string>} Returns the object with converted values or NaN
+ */
+const stringifyObjValues = (data) => {
+  /**
+   * @type {Object<string, string>}
+   */
+  const stringData = {};
+  Object.keys(data).map((key) => {
+    stringData[key] = data[key].toString();
+    return stringData;
+  });
+
+  return stringData;
+};
+
+/**
  * @description Attempts to trim white spaces within an object's values
  * @param {Object<string, string>} data
  *
@@ -34,4 +53,4 @@ const trimify = (data) => {
   return strippedData;
 };
 
-export { numberify, trimify };
+export { numberify, trimify, stringifyObjValues };

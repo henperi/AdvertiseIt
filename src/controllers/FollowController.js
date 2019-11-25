@@ -29,10 +29,11 @@ class FollowController {
 
     try {
       const getFollowee = () => UserRepo.getById(followeeId);
-      const checkFollowing = () => FollowerRepo.checkFollowing({
-        followerId: id,
-        userId: followeeId,
-      });
+      const checkFollowing = () =>
+        FollowerRepo.checkFollowing({
+          followerId: id,
+          userId: followeeId,
+        });
 
       const [followee, isFollowing] = await Promise.all([
         getFollowee(),
@@ -70,13 +71,15 @@ class FollowController {
     const { id } = res.locals.user;
 
     try {
-      const countFollowers = () => FollowerRepo.countFollowers({
-        userId: id,
-      });
+      const countFollowers = () =>
+        FollowerRepo.countFollowers({
+          userId: id,
+        });
 
-      const countFollowing = () => FollowerRepo.countFollowing({
-        followerId: id,
-      });
+      const countFollowing = () =>
+        FollowerRepo.countFollowing({
+          followerId: id,
+        });
 
       const [followers, follwing] = await Promise.all([
         countFollowers(),

@@ -10,6 +10,7 @@ export default (sequelize, DataTypes) => {
       email: DataTypes.STRING,
       password: DataTypes.STRING,
       secretKey: DataTypes.STRING,
+      fcmToken: DataTypes.STRING,
       accountType: {
         type: DataTypes.STRING,
         defaultValue: 'Customer',

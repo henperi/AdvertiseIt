@@ -53,7 +53,7 @@ class ProductController {
         });
       }
 
-      const promises = imageFiles.map(image =>
+      const promises = imageFiles.map((image) =>
         imageService.uploader.upload(image.path),
       );
 
@@ -67,7 +67,7 @@ class ProductController {
         userId: id,
       });
 
-      const formatImages = uploadImages.map(image => ({
+      const formatImages = uploadImages.map((image) => ({
         image: image.url,
         isMainImage: false,
         productId: createdProduct.id,
@@ -119,12 +119,12 @@ class ProductController {
         return AppResponse.conflict(res, {
           message: `Product already has ${
             product.ProductImages.length
-          } images. You can add a max of ${maxImageLength -
-            product.ProductImages.length} more`,
+          } images. You can add a max of 
+          ${maxImageLength - product.ProductImages.length} more`,
         });
       }
 
-      const productImages = images.map(image => ({
+      const productImages = images.map((image) => ({
         ...image,
         productId,
       }));
@@ -285,8 +285,6 @@ class ProductController {
       ]);
 
       if (product) {
-        // log(product);
-        // return;
         product.dataValues.ProductImages = productImage;
         product.dataValues.views = parseInt(product.dataValues.views, 10);
         product.dataValues.likes = parseInt(product.dataValues.likes, 10);
@@ -350,6 +348,7 @@ class ProductController {
       const likeStatus = await ProductRepo.addLike({
         productId,
         likerId: id,
+        ownerId: product.userId,
       });
 
       let message;
