@@ -167,9 +167,6 @@ class ProductController {
         getProducts(),
       ]);
 
-      // products.dataValues.ProductImages = [products.dataValues.ProductImages];
-      // log(products);
-
       const totalPages = Math.ceil(count / paginationData.pageSize);
 
       const metaData = { count, totalPages, ...paginationData };
