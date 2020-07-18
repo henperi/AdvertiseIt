@@ -62,7 +62,7 @@
     "faker": "^4.1.0",
     "fcm-node": "^1.5.2",
     "jsonwebtoken": "^8.5.1",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.19",
     "moment": "^2.24.0",
     "morgan": "^1.9.1",
     "naija-phone-number": "^1.0.2",
