@@ -54,7 +54,7 @@
     "coveralls": "^3.0.3",
     "cross-env": "^5.2.0",
     "dotenv": "^8.0.0",
-    "express": "^4.16.4",
+    "express": "^4.17.3",
     "express-form-data": "^2.0.10",
     "express-ip": "^1.0.3",
     "express-rate-limit": "^4.0.1",
